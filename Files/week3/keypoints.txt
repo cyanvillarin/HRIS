@@ -1,0 +1,315 @@
+<> CH 1 Notes:
+I. Learned how to deploy to machine
+II. Learned how to deploy to heroku
+
+	1. In app/controllers/application_controller.rb add the following:
+
+			def hello
+				render html: “Hello World!”
+			end
+	
+	2. In config/routes.rb, add the following:
+		
+			roo ‘application#hello’
+
+	3. Edit Gemfile
+
+	4. Test on local server: type “rails server” then open on localhost:3000
+
+	5. Initialize Repository and Upload to Heroku
+		- git init
+		- git add -A
+		- git commit -m “Initialize”
+		- Create a new repository on Github
+		- git remote add origin <git link>
+		- git push -u origin —all
+
+		- Edit
+		- git add -A
+		- git commit -am “Add Hello”
+		- heroku create
+		- git push heroku master
+
+—————————————————————————————————————————————————————————
+<> CH 2 Notes:
+I. Learned about MVC
+	Model - pulls from the database
+	View - displays the page as HTML
+	Controller - asks the Model to get Data from the Database
+			    - asks the View to render the page as HTML
+			    - passes the HTML back to the browser
+
+II. Learned how to create a table
+	1. rails generate scaffold User name:string email:string or <integer, text>
+		- To destroy scaffold: rails destroy scaffold <scaffold name>
+	2. rails db:migrate 
+		- NOTE: everytime you add a new scaffold/table in db, you migrate db.
+	3. rails server
+
+III. Learned how to delete table
+	- to access database of the rails app, just type “rails db”
+	- .table to view the list of tables
+	- drop table <tablename> to delete a table
+
+IV. Editing Models - Forming Associations between Data Models
+	- in micropost.rb
+		belongs_to :user
+  		validates :content, length: { maximum: 140 }
+	- in user.rb
+		has_many :microposts
+
+V. Opening a Rails Console
+	- rails c/console
+
+VI. Migrate the database to the Heroku’s DB
+	- heroku run rails db:migrate
+	- heroku run:detached rake db:migrate <THIS WORKS>
+	- https://cyantesto.herokuapp.com/
+	- rename: heroku apps:rename new_name
+
+—————————————————————————————————————————————————————————
+<> CH 3 Notes:
+	- rails new <app_name>
+	- edit Gem File
+	- bundle install —without production
+	- bundle update
+	- initialize in Github
+
+1.  Switch to a new branch
+	- git checkout -b static-pages
+
+2. Generate a new controller
+	- rails generate controller StaticPages home help
+
+<><> IMPORTANT <><>
+3. Automated Testing
+	- ls test/controllers/
+	- edit controller_test files
+	- rails test
+	- get '/' => for testing if there’s a root
+
+4. Create a new file!
+	- touch app/views/static_pages/about.html.erb
+	- eRB = embedded Ruby: is the primary template system for including dynamic content in web pages
+
+5. Use of eRB and Layout file in app/views/layout
+
+—————————————————————————————————————————————————————————
+<> CH 4 Notes:
+
+1. Usage of Application Helper - basically functions for backend, available in ALL views
+2. Strings and Methods
+3. Comments
+4. .length and .empty
+5. Conditionals (use          && AND        || OR     ! NOT)
+	if s?
+		<do something>
+	elsif s?
+		<do something>
+	elsif d?
+		<do something>
+	else
+		<do something>
+	end
+
+	<><> NEW <><>
+
+	puts "x is not empty" if !x.empty?
+
+	OR 
+
+	puts "The string '#{string}' is nonempty." unless string.empty?
+
+6. Split Function
+ 	## splits on whitespace 
+		"foo bar     baz".split  => ["foo", "bar", "baz"]
+
+	## with delimiter x	
+		"fooxbarxbazx".split('x') 
+
+7. Arrays
+	a[0] 	a[1] 		… 		a[n] = a[-1]
+	a.first 	a.second	…		a.last
+	
+	Functions:
+		- a.empty?
+		- a.include?
+		- a.sort
+		- a.reverse
+		- a.shuffle ?
+		- a.push(x)
+		- a.join
+		- a.join(‘, ’)
+
+
+8. Loops
+
+	- (1..5).each { |i| puts 2 * i }
+	
+OR
+
+	(1..5).each do |i|
+		puts 2 * i
+	end
+
+OR
+
+	(1..5).each do |number|
+		puts 2 * number
+		puts '--'
+	end
+
+9. Hashes / Dictionary
+	- user = {}    EMPTY HASH
+	- user["first_name"] = "Michael"     KEY first_name VALUE Michael
+
+10. Instantiating Classes
+	- a = Array.new([1, 3, 2])
+	- s = String.new("foobar") 
+	- h = Hash.new
+
+11. Inheritance 
+	>> s = String.new("foobar")
+	=> "foobar"
+	>> s.class                        # Find the class of s.
+	=> String
+	>> s.class.superclass             # Find the superclass of String.
+	=> Object
+	>> s.class.superclass.superclass  # Ruby 1.9 uses a new BasicObject base class
+	=> BasicObject
+	>> s.class.superclass.superclass.superclass
+	=> nil
+
+	ANG COOL, pwede i-inherit ung class na String para magamit ung reverse na function ng String Class
+
+	>>  	class Word < String             # Word inherits from String.	
+	>>   # Returns true if the string is its own reverse.
+	>>   		def palindrome?
+	>>     		self == self.reverse        # self is the string itself.
+	>>   		end
+	>> 	end
+	=> nil
+						
+—————————————————————————————————————————————————————————
+<> CH 5 Notes:
+
+1. How to add a layout - adding a CSS
+	- create a new CSS file
+		<> touch app/assets/stylesheets/custom.scss
+
+2. Working with CSS
+3. Making partials
+	- Creating a Partial
+		touch app/views/layouts/_<name>.html.erb
+	- How to call Partials 
+		<%= render 'layouts/<partial_name without the _>’ %>
+
+4. Asset Directories
+	app/assets: assets specific to the present application
+	lib/assets: assets for libraries written by your dev team
+	vendor/assets: assets from third-party vendors
+
+	*= require_tree . MEANS that all CSS files in the app/assets/stylesheets directory are included into the application CSS
+
+	*= require_self SPECIFIES where in the loading sequence the CSS in application.css itself gets included.
+
+5. Creating a Test for Site Layout
+	- rails generate integration_test site_layout
+	- rails test:integration OR rails test
+
+6. Generate a new User Controller 
+	rails generate controller Users new
+
+—————————————————————————————————————————————————————————
+<> CH 6 Notes:
+
+1. Generate User Model
+	- rails generate model User name:string email:string
+
+2. When you create a Model, it automatically creates a file for db migrate
+
+3. Then rails db:migrate
+	NOTE: .quit for quitting the terminal
+
+4. schema.rb contains the structure of the tables
+
+5. user = User.new(name: "Michael Hartl", email: "mhartl@example.com")
+     user.save ## COOL, user.save lang for saving to db
+
+6. User.create save to function
+	foo = User.create(name: "Foo", email: "foo@bar.com")
+	foo.destroy
+
+7. SELECT
+	- User.find(1)
+
+8. SELECT by filter
+	- User.find_by(email: "mhartl@example.com")
+
+9. User.first, User.all
+
+10. Updating user object
+	- user.email = <somwthing>
+	- user.save
+
+	- user.update_attributes(name: "The Dude", email: "dude@abides.org")
+	- user.update_attribute(:name, "El Duderino")
+
+11. Validity Testing for models
+	- rails test:models
+	
+	<><> IN app/models/user.rb <><>
+	- validates :name, presence: true 
+
+	<><> IN test/models/user_test.rb <><>
+	-	test "name should be present" do
+    			@user.name = ""
+    			assert_not @user.valid?
+  		end
+
+	TEST
+	rails console --sandbox
+		>> user = User.new(name: "", email: "mhartl@example.com")
+		>> user.valid?
+		>> user.errors.full_messages
+		>> user.save (ERROR since not VALID)
+
+	<><> TESTING FOR VALID EMAIL <><>
+		= VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-]+(\.[a-z\d\-]+)*\.[a-z]+\z/i
+		= add to email in app/models/user.rb <><> ,format:     { with: VALID_EMAIL_REGEX }
+
+	<><> UNIQUENESS on the MODEL LEVEL <><>
+
+		test "email addresses should be unique" do
+    			duplicate_user = @user.dup
+   			 @user.save
+    			assert_not duplicate_user.valid?
+  		end
+
+12. Uniqueness on the DB Level
+	- First, when checking the db if an email is already used, a practice of scanning every row in the DB is the BAD practice. So in turn, we have to use indices to just see the page which contains our target email.
+
+	<><> INDEX for Users Email
+	- rails generate migration add_index_to_users_email
+
+	<><> IN db/migrate/[timestamp]_add_index_to_users_email.rb <><> 
+		class AddIndexToUsersEmail < ActiveRecord::Migration[5.0]
+  			def change
+    				add_index :users, :email, unique: true
+  			end
+		end
+
+	- test/fixtures/users.yml (? ?)
+
+13. Adding a secure password
+	- password_digest = hashed password
+	- rails generate migration add_password_digest_to_users password_digest:string
+	- $ rails db:migrate
+	- Encrypted using BCRYPT
+
+14. Run Heroku DB console
+	- heroku run rails console --sandbox
+
+KEYPOINTS: 
+	<><> Migrations allow us to modify our application’s data model.
+
